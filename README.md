@@ -1,2 +1,1 @@
-# Mix-Teaching
-This is the official implementation of our manuscript Mix-Teaching: a general semi-supervised learning framework for monocular 3D object detection.
+# Mix-Teaching: A Simple, Unified and Effective Semi-Supervised Learning Framework for Monocular 3D Object Detection
