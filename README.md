@@ -2,7 +2,7 @@
 
 <img src="figures/Mix-Teaching.jpg" alt="vis2" style="zoom:30%" />
 
-This is the official implementation of our manuscript **Mix-Teaching: a general semi-supervised learning framework for monocular 3D object detection**. The raw data of KITTI which consists of 48K temporal images is used as unlabeled data in all experiments. For more details, please see our paper.
+This is the official implementation of our manuscript [**Mix-Teaching: a general semi-supervised learning framework for monocular 3D object detection**](https://arxiv.org/abs/2207.04448v1). The raw data of KITTI which consists of 48K temporal images is used as unlabeled data in all experiments. For more details, please see our paper.
 
 The performance on KITTI validation set (3D) is as follows:
 <table align="center">
@@ -62,8 +62,8 @@ The performance on KITTI validation set (3D) is as follows:
 </table>
 
 
-# Getting Started
-## 1. Installation
+## Getting Started
+### 1. Installation
 Please refer to [Installation](MonoFlex/README.md)
 
 Then run
@@ -73,7 +73,7 @@ git clone https://github.com/open-mmlab/mmdetection3d && cd mmdetection3d && git
 cd ../ && pip install mmdetection3d/
 ```
 
-## 2. Dataset
+### 2. Dataset
 Please first download the training set and organize it as following structure:
 
 ```
@@ -104,10 +104,10 @@ Then run
 python create_data.py --kitti_root ../datasets/kitti
 ```
 
-## 3. Train teacher model
+### 3. Train teacher model
 Please refer to [Training](MonoFlex/README.md) in supervised mode.
 
-## 4. Generate pseudo labels for unlabeled data
+### 4. Generate pseudo labels for unlabeled data
 Please refer to [Inference](MonoFlex/README.md).
 
 Inference on unlabeled data and organize results as following structure:
@@ -124,7 +124,7 @@ pred_folders
 └── ...            
 ```  
 
-## 5. Pseudo labeling
+### 5. Pseudo labeling
 ```console
 python uncertainty_estimator.py --kitti_root ../datasets/kitti --pred_folders <path-to-pred_folders>/
 python create_data.py --kitti_root ../datasets/kitti --ssl True
@@ -135,7 +135,30 @@ or
 ```console
 bash pseudo_labeling.sh
 ```
-## 6. Train student model with labeled and unlabeled data
+### 6. Train student model with labeled and unlabeled data
 Please refer to [Training](MonoFlex/README.md) in semi-supervised model.
 
-## 7. Continue with step 4.
+### 7. Continue with step 4.
+
+
+## Citation
+If you find our work useful in your research, please consider citing:
+
+```latex
+@article{Yang2022MixTeachingAS,
+  title={Mix-Teaching: A Simple, Unified and Effective Semi-Supervised Learning Framework for Monocular 3D Object Detection},
+  author={Lei Yang and Xinyu Zhang and Li Wang and Minghan Zhu and Chuan-Fang Zhang and Jun Li},
+  journal={ArXiv},
+  year={2022},
+  volume={abs/2207.04448}
+}
+```
+
+## Acknowledgements
+Thank for the excellent cooperative perception codebases [MonoFlex](https://arxiv.org/pdf/2104.02323.pdf)
+
+Thank for the excellent perception datasets [KITTI](https://www.cvlibs.net/datasets/kitti/)
+
+## Contact
+
+If you have any problem with this code, please feel free to contact **yanglei20@mails.tsinghua.edu.cn**.
