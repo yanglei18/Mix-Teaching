@@ -5,6 +5,7 @@ import cv2
 
 import numpy as np
 from shutil import copyfile
+from tqdm import tqdm
 
 from utils.kitti_utils import *
 from utils.utils import Projector, load_intrinsic, load_raw_data_intrinsic
@@ -21,7 +22,19 @@ def parse_option():
 
     args = parser.parse_args()
     return args
-    
+
+def get_pixel_key(image_name):
+    image = cv2.imread(image_name)
+    pixel_key = '{:.8f}_{:.8f}'.format(np.mean(image), np.std(image))
+    return pixel_key
+
+def load_obj3d_frames(kitti_root):
+    image_database = []
+    image_path = os.path.join(kitti_root, "training", "image_2")
+    for image_name in tqdm(os.listdir(image_path)):
+        pixel_key = get_pixel_key(image_name)
+        image_database.append(pixel_key)
+    return image_database
 
 def calib_generation(lidar_calib_file, cam_calib_file, calib_path):
     vel_to_cam, cam_to_vel, R0_rect, Tr_velo_to_cam = KittiCalibration.get_transform_matrix(lidar_calib_file, cam_calib_file)
@@ -59,6 +72,7 @@ def copy_file(file_src, file_dest):
 if __name__ == "__main__":
     args = parse_option()
     raw_data_root, kitti_root, is_demo = args.raw_data_root, args.kitti_root, args.demo
+    image_database = load_obj3d_frames(kitti_root)
     dates = ['2011_09_26', '2011_09_28', '2011_09_29', '2011_10_03', '2011_09_30']
     
     kitti_root = os.path.join(kitti_root, "testing")
@@ -96,6 +110,9 @@ if __name__ == "__main__":
                 dest_calib_file_name = os.path.join(kitti_root, "calib", dest_file_name + ".txt")
     
                 if os.path.exists(src_image_02_file_name) and os.path.exists(src_image_03_file_name) and os.path.exists(src_velodyne_file_name):
+                    pixel_key = get_pixel_key(src_image_02_file_name)
+                    if pixel_key in image_database:
+                        continue
                     P2, P3, vel_to_cam = calib_generation(lidar_calib_file, cam_calib_file, dest_calib_file_name)
                     copy_file(src_image_02_file_name, dest_image_02_file_name)
                     copy_file(src_image_03_file_name, dest_image_03_file_name)
